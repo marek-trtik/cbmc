@@ -515,7 +515,7 @@ inline char *strdup(const char *str)
 void *memcpy(void *dst, const void *src, size_t n)
 {
   __CPROVER_HIDE:
-  #ifdef __CPROVER_STRING_ABSTRACTION
+ #ifdef __CPROVER_STRING_ABSTRACTION
   __CPROVER_assert(__CPROVER_buffer_size(src)>=n, "memcpy buffer overflow");
   __CPROVER_assert(__CPROVER_buffer_size(dst)>=n, "memcpy buffer overflow");
   //  for(size_t i=0; i<n ; i++) dst[i]=src[i];
@@ -572,10 +572,10 @@ void *__builtin___memcpy_chk(void *dst, const void *src, __CPROVER_size_t n, __C
   (void)*(char *)dst; // check that the memory is accessible
   (void)*(const char *)src; // check that the memory is accessible
   (void)size;
-  //for(__CPROVER_size_t i=0; i<n ; i++) ((char *)dst)[i]=((const char *)src)[i];
-  char src_n[n];
-  __CPROVER_array_copy(src_n, (char*)src);
-  __CPROVER_array_replace((char*)dst, src_n);
+  for(__CPROVER_size_t i=0; i<n ; i++) ((char *)dst)[i]=((const char *)src)[i];
+  //char src_n[n];
+  //__CPROVER_array_copy(src_n, (char*)src);
+  //__CPROVER_array_replace((char*)dst, src_n);
   #endif
   return dst;
 }
