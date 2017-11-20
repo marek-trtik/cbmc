@@ -11,8 +11,11 @@ inline char *__builtin___strcpy_chk(char *dst, const char *src, __CPROVER_size_t
   __CPROVER_is_zero_string(dst)=1;
   __CPROVER_zero_string_length(dst)=__CPROVER_zero_string_length(src);
   #else
-  __CPROVER_assert(__CPROVER_POINTER_OBJECT(dst)!=
-                   __CPROVER_POINTER_OBJECT(src), "strcpy src/dst overlap");
+    __CPROVER_assert(
+      __CPROVER_POINTER_OBJECT(dst) != __CPROVER_POINTER_OBJECT(src) ||
+      __CPROVER_POINTER_OFFSET(src) + s <= __CPROVER_POINTER_OFFSET(dst) ||
+      __CPROVER_POINTER_OFFSET(dst) + s <= __CPROVER_POINTER_OFFSET(src),
+      "strcpy src/dst overlap");
   __CPROVER_size_t i=0;
   char ch;
   do
@@ -117,8 +120,16 @@ inline char *strcpy(char *dst, const char *src)
   __CPROVER_is_zero_string(dst)=1;
   __CPROVER_zero_string_length(dst)=__CPROVER_zero_string_length(src);
   #else
-  __CPROVER_assert(__CPROVER_POINTER_OBJECT(dst)!=
-                   __CPROVER_POINTER_OBJECT(src), "strcpy src/dst overlap");
+    {
+    unsigned long n;
+    for(n = 0U; *(src + n) != 0; ++n)
+        ;
+    __CPROVER_assert(
+      __CPROVER_POINTER_OBJECT(dst) != __CPROVER_POINTER_OBJECT(src) ||
+      __CPROVER_POINTER_OFFSET(src) + s < __CPROVER_POINTER_OFFSET(dst) ||
+      __CPROVER_POINTER_OFFSET(dst) + s < __CPROVER_POINTER_OFFSET(src),
+      "strcpy src/dst overlap");
+    }
   __CPROVER_size_t i=0;
   char ch;
   do
