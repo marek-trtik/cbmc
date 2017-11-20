@@ -620,11 +620,11 @@ void *memset(void *s, int c, size_t n)
     __CPROVER_is_zero_string(s)=0;
   #else
   (void)*(char *)s; // check that the memory is accessible
-  //char *sp=s;
-  //for(__CPROVER_size_t i=0; i<n ; i++) sp[i]=c;
-  unsigned char s_n[n];
-  __CPROVER_array_set(s_n, (unsigned char)c);
-  __CPROVER_array_replace((unsigned char*)s, s_n);
+  char *sp=s;
+  for(__CPROVER_size_t i=0; i<n ; i++) sp[i]=c;
+  //unsigned char s_n[n];
+  //__CPROVER_array_set(s_n, (unsigned char)c);
+  //__CPROVER_array_replace((unsigned char*)s, s_n);
   #endif
   return s;
 }
@@ -650,11 +650,11 @@ void *__builtin_memset(void *s, int c, __CPROVER_size_t n)
   else
     __CPROVER_is_zero_string(s)=0;
   #else
-  //char *sp=s;
-  //for(__CPROVER_size_t i=0; i<n ; i++) sp[i]=c;
-  unsigned char s_n[n];
-  __CPROVER_array_set(s_n, (unsigned char)c);
-  __CPROVER_array_replace((unsigned char*)s, s_n);
+  char *sp=s;
+  for(__CPROVER_size_t i=0; i<n ; i++) sp[i]=c;
+  //unsigned char s_n[n];
+  //__CPROVER_array_set(s_n, (unsigned char)c);
+  //__CPROVER_array_replace((unsigned char*)s, s_n);
   #endif
   return s;
 }
@@ -683,11 +683,11 @@ void *__builtin___memset_chk(void *s, int c, __CPROVER_size_t n, __CPROVER_size_
   #else
   (void)*(char *)s; // check that the memory is accessible
   (void)size;
-  //char *sp=s;
-  //for(__CPROVER_size_t i=0; i<n ; i++) sp[i]=c;
-  unsigned char s_n[n];
-  __CPROVER_array_set(s_n, (unsigned char)c);
-  __CPROVER_array_replace((unsigned char*)s, s_n);
+  char *sp=s;
+  for(__CPROVER_size_t i=0; i<n ; i++) sp[i]=c;
+  //unsigned char s_n[n];
+  //__CPROVER_array_set(s_n, (unsigned char)c);
+  //__CPROVER_array_replace((unsigned char*)s, s_n);
   #endif
   return s;
 }
