@@ -188,8 +188,6 @@ exprt dynamic_object_upper_bound(
 
   exprt object_offset=pointer_offset(pointer);
 
-  exprt size=size_of_expr(dereference_type, ns);
-
   // need to add size
   irep_idt op=ID_ge;
   exprt sum=object_offset;
@@ -208,7 +206,7 @@ exprt dynamic_object_upper_bound(
      ns.follow(malloc_size.type()))
     sum.make_typecast(malloc_size.type());
 
-  return binary_relation_exprt(sum, ID_gt, malloc_size);
+  return binary_relation_exprt(sum, op, malloc_size);
 }
 
 exprt object_upper_bound(
