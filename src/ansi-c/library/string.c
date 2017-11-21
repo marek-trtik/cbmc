@@ -526,6 +526,8 @@ inline char *strdup(const char *str)
 void *memcpy(void *dst, const void *src, size_t n)
 {
   __CPROVER_HIDE:
+  if(n==0U)
+    return dst;
  #ifdef __CPROVER_STRING_ABSTRACTION
   __CPROVER_assert(__CPROVER_buffer_size(src)>=n, "memcpy buffer overflow");
   __CPROVER_assert(__CPROVER_buffer_size(dst)>=n, "memcpy buffer overflow");
@@ -547,8 +549,8 @@ void *memcpy(void *dst, const void *src, size_t n)
     "memcpy src/dst overlap");
   (void)*(char *)dst; // check that the memory is accessible
   (void)*(const char *)src; // check that the memory is accessible
-  if(n > 0U) (void)*((char *)dst+(n-1)); // check that the memory is accessible
-  if(n > 0U) (void)*((const char *)src+(n-1)); // check that the memory is accessible
+  (void)*((char *)dst+(n-1)); // check that the memory is accessible
+  (void)*((const char *)src+(n-1)); // check that the memory is accessible
   //for(__CPROVER_size_t i=0; i<n ; i++) ((char *)dst)[i]=((const char *)src)[i];
   char src_n[n];
   __CPROVER_array_copy(src_n, (char*)src);
@@ -562,6 +564,8 @@ void *memcpy(void *dst, const void *src, size_t n)
 void *__builtin___memcpy_chk(void *dst, const void *src, __CPROVER_size_t n, __CPROVER_size_t size)
 {
   __CPROVER_HIDE:
+  if(size==0U)
+    return dst;
   #ifdef __CPROVER_STRING_ABSTRACTION
   __CPROVER_assert(__CPROVER_buffer_size(src)>=n, "memcpy buffer overflow");
   __CPROVER_assert(__CPROVER_buffer_size(dst)>=n, "memcpy buffer overflow");
@@ -584,11 +588,12 @@ void *__builtin___memcpy_chk(void *dst, const void *src, __CPROVER_size_t n, __C
      "__builtin___memcpy_chk src/dst overlap");
   (void)*(char *)dst; // check that the memory is accessible
   (void)*(const char *)src; // check that the memory is accessible
-  (void)size;
-  for(__CPROVER_size_t i=0; i<n ; i++) ((char *)dst)[i]=((const char *)src)[i];
-  //char src_n[n];
-  //__CPROVER_array_copy(src_n, (char*)src);
-  //__CPROVER_array_replace((char*)dst, src_n);
+  (void)*((char *)dst+(size-1)); // check that the memory is accessible
+  (void)*((const char *)src+(size-1)); // check that the memory is accessible
+  //for(__CPROVER_size_t i=0; i<n ; i++) ((char *)dst)[i]=((const char *)src)[i];
+  char src_n[n];
+  __CPROVER_array_copy(src_n, (char*)src);
+  __CPROVER_array_replace((char*)dst, src_n);
   #endif
   return dst;
 }
@@ -605,6 +610,8 @@ void *__builtin___memcpy_chk(void *dst, const void *src, __CPROVER_size_t n, __C
 void *memset(void *s, int c, size_t n)
 {
   __CPROVER_HIDE:;
+  if(n==0U)
+    return s;
   #ifdef __CPROVER_STRING_ABSTRACTION
   __CPROVER_assert(__CPROVER_buffer_size(s)>=n, "memset buffer overflow");
   //  for(size_t i=0; i<n ; i++) s[i]=c;
@@ -622,11 +629,12 @@ void *memset(void *s, int c, size_t n)
     __CPROVER_is_zero_string(s)=0;
   #else
   (void)*(char *)s; // check that the memory is accessible
-  char *sp=s;
-  for(__CPROVER_size_t i=0; i<n ; i++) sp[i]=c;
-  //unsigned char s_n[n];
-  //__CPROVER_array_set(s_n, (unsigned char)c);
-  //__CPROVER_array_replace((unsigned char*)s, s_n);
+  (void)*((char *)s+(n-1)); // check that the memory is accessible
+//  char *sp=s;
+//  for(__CPROVER_size_t i=0; i<n ; i++) sp[i]=c;
+  unsigned char s_n[n];
+  __CPROVER_array_set(s_n, (unsigned char)c);
+  __CPROVER_array_replace((unsigned char*)s, s_n);
   #endif
   return s;
 }
@@ -636,6 +644,8 @@ void *memset(void *s, int c, size_t n)
 void *__builtin_memset(void *s, int c, __CPROVER_size_t n)
 {
   __CPROVER_HIDE:;
+  if(n==0U)
+    return s;
   #ifdef __CPROVER_STRING_ABSTRACTION
   __CPROVER_assert(__CPROVER_buffer_size(s)>=n, "memset buffer overflow");
   //  for(size_t i=0; i<n ; i++) s[i]=c;
@@ -652,11 +662,13 @@ void *__builtin_memset(void *s, int c, __CPROVER_size_t n)
   else
     __CPROVER_is_zero_string(s)=0;
   #else
-  char *sp=s;
-  for(__CPROVER_size_t i=0; i<n ; i++) sp[i]=c;
-  //unsigned char s_n[n];
-  //__CPROVER_array_set(s_n, (unsigned char)c);
-  //__CPROVER_array_replace((unsigned char*)s, s_n);
+  (void)*(char *)s; // check that the memory is accessible
+  (void)*((char *)s+(n-1)); // check that the memory is accessible
+//  char *sp=s;
+//  for(__CPROVER_size_t i=0; i<n ; i++) sp[i]=c;
+  unsigned char s_n[n];
+  __CPROVER_array_set(s_n, (unsigned char)c);
+  __CPROVER_array_replace((unsigned char*)s, s_n);
   #endif
   return s;
 }
@@ -666,6 +678,8 @@ void *__builtin_memset(void *s, int c, __CPROVER_size_t n)
 void *__builtin___memset_chk(void *s, int c, __CPROVER_size_t n, __CPROVER_size_t size)
 {
   __CPROVER_HIDE:;
+  if(n==0U)
+    return s;
   #ifdef __CPROVER_STRING_ABSTRACTION
   __CPROVER_assert(__CPROVER_buffer_size(s)>=n, "memset buffer overflow");
   __CPROVER_assert(__CPROVER_buffer_size(s)==size, "builtin object size");
@@ -684,12 +698,12 @@ void *__builtin___memset_chk(void *s, int c, __CPROVER_size_t n, __CPROVER_size_
     __CPROVER_is_zero_string(s)=0;
   #else
   (void)*(char *)s; // check that the memory is accessible
-  (void)size;
-  char *sp=s;
-  for(__CPROVER_size_t i=0; i<n ; i++) sp[i]=c;
-  //unsigned char s_n[n];
-  //__CPROVER_array_set(s_n, (unsigned char)c);
-  //__CPROVER_array_replace((unsigned char*)s, s_n);
+  (void)*((char *)s+(n-1)); // check that the memory is accessible
+//  char *sp=s;
+//  for(__CPROVER_size_t i=0; i<n ; i++) sp[i]=c;
+  unsigned char s_n[n];
+  __CPROVER_array_set(s_n, (unsigned char)c);
+  __CPROVER_array_replace((unsigned char*)s, s_n);
   #endif
   return s;
 }
