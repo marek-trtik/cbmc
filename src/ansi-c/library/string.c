@@ -547,10 +547,12 @@ void *memcpy(void *dst, const void *src, size_t n)
     "memcpy src/dst overlap");
   (void)*(char *)dst; // check that the memory is accessible
   (void)*(const char *)src; // check that the memory is accessible
-  for(__CPROVER_size_t i=0; i<n ; i++) ((char *)dst)[i]=((const char *)src)[i];
-  //char src_n[n];
-  //__CPROVER_array_copy(src_n, (char*)src);
-  //__CPROVER_array_replace((char*)dst, src_n);
+  if(n > 0U) (void)*((char *)dst+(n-1)); // check that the memory is accessible
+  if(n > 0U) (void)*((const char *)src+(n-1)); // check that the memory is accessible
+  //for(__CPROVER_size_t i=0; i<n ; i++) ((char *)dst)[i]=((const char *)src)[i];
+  char src_n[n];
+  __CPROVER_array_copy(src_n, (char*)src);
+  __CPROVER_array_replace((char*)dst, src_n);
   #endif
   return dst;
 }
