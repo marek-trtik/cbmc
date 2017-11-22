@@ -287,13 +287,14 @@ exprt member_offset_expr(
     if(it->type().id()==ID_c_bit_field)
     {
       std::size_t w=to_c_bit_field_type(it->type()).get_width();
+      bit_field_bits+=w;
       std::size_t bytes;
-      for(bytes=0; w>bit_field_bits; ++bytes, bit_field_bits+=8) {}
-      bit_field_bits-=w;
+      bytes=bit_field_bits/8U;
       result=plus_exprt(result, from_integer(bytes, result.type()));
     }
     else
     {
+      bit_field_bits=0;
       const typet &subtype=it->type();
       exprt sub_size=size_of_expr(subtype, ns);
       if(sub_size.is_nil())
