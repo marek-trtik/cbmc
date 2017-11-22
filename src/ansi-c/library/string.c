@@ -126,8 +126,8 @@ inline char *strcpy(char *dst, const char *src)
         ;
     __CPROVER_assert(
       __CPROVER_POINTER_OBJECT(dst) != __CPROVER_POINTER_OBJECT(src) ||
-      __CPROVER_POINTER_OFFSET(src) + s < __CPROVER_POINTER_OFFSET(dst) ||
-      __CPROVER_POINTER_OFFSET(dst) + s < __CPROVER_POINTER_OFFSET(src),
+      __CPROVER_POINTER_OFFSET(src) + n < __CPROVER_POINTER_OFFSET(dst) ||
+      __CPROVER_POINTER_OFFSET(dst) + n < __CPROVER_POINTER_OFFSET(src),
       "strcpy src/dst overlap");
     }
   __CPROVER_size_t i=0;
