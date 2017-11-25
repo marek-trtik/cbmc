@@ -48,6 +48,7 @@ public:
     total_vccs(0),
     remaining_vccs(0),
     constant_propagation(true),
+    self_loops_to_assumptions(true),
     new_symbol_table(_new_symbol_table),
     language_mode(),
     ns(_ns),
@@ -92,6 +93,7 @@ public:
   unsigned total_vccs, remaining_vccs;
 
   bool constant_propagation;
+  bool self_loops_to_assumptions;
 
   optionst options;
   symbol_tablet &new_symbol_table;
