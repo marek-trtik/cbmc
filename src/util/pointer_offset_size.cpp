@@ -290,6 +290,7 @@ exprt member_offset_expr(
       bit_field_bits+=w;
       std::size_t bytes;
       bytes=bit_field_bits/8U;
+      bit_field_bits=bit_field_bits%8U;
       result=plus_exprt(result, from_integer(bytes, result.type()));
     }
     else
