@@ -22,6 +22,8 @@ Author: Daniel Kroening
 #include <util/std_pair_hash.h>
 #include <unordered_map>
 
+#include <util/cprover_prefix.h>
+
 void graphml_witnesst::remove_l0_l1(exprt &expr)
 {
   if(expr.id()==ID_symbol)
@@ -200,7 +202,11 @@ static bool filter_out(
      source_location.get_file().empty() ||
      source_location.is_built_in() ||
      source_location.get_line().empty())
-    return true;
+  {
+    const irep_idt id=source_location.get_function();
+    if(!(has_prefix(id2string(id), CPROVER_PREFIX) && it->is_assert()))
+      return true;
+  }
 
   return false;
 }
@@ -270,6 +276,7 @@ void graphml_witnesst::operator()(const goto_tracet &goto_trace)
     graphml[node].line=source_location.get_line();
     graphml[node].is_violation=
       it->type==goto_trace_stept::typet::ASSERT && !it->cond_value;
+
     graphml[node].has_invariant=false;
 
     step_to_node[it->step_nr]=node;
