@@ -1952,9 +1952,9 @@ std::string expr2ct::convert_constant_bool(bool boolean_value)
 {
   // C doesn't really have these
   if(boolean_value)
-    return "TRUE";
+    return "1";
   else
-    return "FALSE";
+    return "0";
 }
 
 std::string expr2ct::convert_struct(
