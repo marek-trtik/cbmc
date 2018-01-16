@@ -1,7 +1,8 @@
 public class test {
-    public static void main(String s) {
-        if (s==null)
+    public static void main(String[] args) {
+        if (args.length < 1)
             return;
+        String s = args[0];
         CharSequence target = "b";
         String replaced = "";
         if (target.length() == 1)

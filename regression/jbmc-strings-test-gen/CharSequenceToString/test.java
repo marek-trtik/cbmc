@@ -1,7 +1,10 @@
 public class test
 {
-    public static void main(CharSequence cs)
+    public static void main(String[] args)
     {
+        if (args.length<1)
+            return;
+        CharSequence cs = (CharSequence)args[0];
         String s = cs.toString();
         int i = -1;
         if(s.equals("case1"))
