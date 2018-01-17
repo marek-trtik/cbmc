@@ -3,5 +3,5 @@ test.class
 --refine-strings --string-max-length 100
 ^EXIT=0$
 ^SIGNAL=0$
-^VERIFICATION SUCCESSFUL$
+^VERIFICATION FAILED$
 --

@@ -13,7 +13,7 @@ public class test {
         int numLines = 0;
 
         try {
-            BufferedReader br = new BufferedReader(new FileReader("test.class"));
+            BufferedReader br = new BufferedReader(new FileReader(args[1]));
             String line = check(br);
             while ((thisLine = check(br)) != null) {
                 System.out.println(thisLine);
